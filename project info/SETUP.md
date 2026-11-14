@@ -1,6 +1,7 @@
 # Setup Info
 ### Make sure you have Node.js (LTS version), Git, and VS Code installed
 ### Clone the repo: https://github.com/masoncoyle/swe4663-project-management-system.git
+### Open the cloned folder in VS Code
 ## Run the Backend
 In the VS Code terminal
    ```
