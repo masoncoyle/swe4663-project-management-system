@@ -1,8 +1,7 @@
 # Setup Info
-## 1. Make sure you have Node.js (LTS version), Git, and VS Code installed
-## 2. Clone the repo: https://github.com/masoncoyle/swe4663-project-management-system.git
-
-## 3. Run the Backend
+1. Make sure you have Node.js (LTS version), Git, and VS Code installed
+2. Clone the repo: https://github.com/masoncoyle/swe4663-project-management-system.git
+## Run the Backend
 In the VS Code terminal
    ```
    cd backend
@@ -11,7 +10,7 @@ In the VS Code terminal
    ```
 You should see "App listening on port 3000"
 
-## 4. Run the Frontend
+## Run the Frontend
 Leave the backend running
 Open a second terminal in VS Code
    ```
@@ -19,5 +18,5 @@ Open a second terminal in VS Code
    npm install
    npm run dev
    ```
-### It runs at http://localhost:5173
-### To check the connection, open http://localhost:5173/api/health. You should see "Server running" if the frontend and backend are connected.
+It runs at http://localhost:5173
+To check the connection, open http://localhost:5173/api/health. You should see "Server running" if the frontend and backend are connected.
