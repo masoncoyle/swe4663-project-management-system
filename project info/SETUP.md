@@ -19,5 +19,5 @@ Open a second terminal in VS Code
    npm install
    npm run dev
    ```
-It runs at http://localhost:5173
-To check the connection, open http://localhost:5173/api/health. You should see "Server running" if the frontend and backend are connected.
+### It runs at http://localhost:5173
+### To check the connection, open http://localhost:5173/api/health. You should see "Server running" if the frontend and backend are connected.
