@@ -9,7 +9,7 @@
    npm install
    npm run dev
    ```
-#### You should see "App listening on port 3000"
+### You should see "App listening on port 3000"
 
 ## 4. Run the Frontend
 ### Leave the backend running
