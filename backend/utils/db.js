@@ -18,6 +18,7 @@ db.exec(`CREATE TABLE IF NOT EXISTS members (
 
 db.exec(`CREATE TABLE IF NOT EXISTS requirements (
     requirement_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
     project_id INTEGER NOT NULL,
     description TEXT,
     type TEXT NOT NULL CHECK(type IN ('functional', 'non-functional')),
@@ -27,6 +28,7 @@ db.exec(`CREATE TABLE IF NOT EXISTS requirements (
 
 db.exec(`CREATE TABLE IF NOT EXISTS risks (
     risk_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
     project_id INTEGER NOT NULL,
     description TEXT,
     priority TEXT CHECK(priority IN ('low', 'medium', 'high')),
