@@ -13,7 +13,7 @@ db.exec(`CREATE TABLE IF NOT EXISTS members (
     project_id INTEGER NOT NULL,
     name TEXT NOT NULL,
     active_status TEXT NOT NULL CHECK(active_status IN ('active', 'inactive')),
-    FOREIGN KEY (project_id) REFERENCES projects(project_id)
+    FOREIGN KEY (project_id) REFERENCES projects(project_id) ON DELETE CASCADE
 )`);
 
 db.exec(`CREATE TABLE IF NOT EXISTS requirements (
@@ -22,7 +22,7 @@ db.exec(`CREATE TABLE IF NOT EXISTS requirements (
     description TEXT,
     type TEXT NOT NULL CHECK(type IN ('functional', 'non-functional')),
     estimate REAL CHECK(estimate >= 0),
-    FOREIGN KEY (project_id) REFERENCES projects(project_id)
+    FOREIGN KEY (project_id) REFERENCES projects(project_id) ON DELETE CASCADE
 )`);
 
 db.exec(`CREATE TABLE IF NOT EXISTS risks (
@@ -33,7 +33,7 @@ db.exec(`CREATE TABLE IF NOT EXISTS risks (
     probability INTEGER CHECK(probability BETWEEN 1 AND 5),
     impact INTEGER CHECK(impact BETWEEN 1 AND 5),
     status TEXT NOT NULL CHECK(status IN ('open', 'mitigating', 'closed')),
-    FOREIGN KEY (project_id) REFERENCES projects(project_id)
+    FOREIGN KEY (project_id) REFERENCES projects(project_id) ON DELETE CASCADE
 )`);
 
 db.exec(`CREATE TABLE IF NOT EXISTS effort (
@@ -43,8 +43,8 @@ db.exec(`CREATE TABLE IF NOT EXISTS effort (
     phase TEXT NOT NULL CHECK(phase IN ('Requirements Analysis', 'Design', 'Coding', 'Testing', 'Project Management')),
     hours REAL NOT NULL CHECK(hours >= 0),
     date TEXT NOT NULL,
-    FOREIGN KEY (requirement_id) REFERENCES requirements(requirement_id),
-    FOREIGN KEY (member_id) REFERENCES members(member_id)
+    FOREIGN KEY (requirement_id) REFERENCES requirements(requirement_id) ON DELETE CASCADE,
+    FOREIGN KEY (member_id) REFERENCES members(member_id) ON DELETE CASCADE
 
 )`);
 

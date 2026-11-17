@@ -61,4 +61,16 @@ router.put("/:project_id", (req, res) => {
   });
 });
 
+// DELETE /api/projects/:project_id to delete a project
+router.delete("/:project_id", (req, res) => {
+  const project = db
+    .prepare("DELETE FROM projects WHERE project_id = ?")
+    .run(req.params.project_id);
+
+  if (project.changes == 0) {
+    return res.status(404).json({ error: "Project not found." });
+  }
+  res.json({ message: "Project deleted." });
+});
+
 export default router;
