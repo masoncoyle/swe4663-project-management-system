@@ -1,6 +1,5 @@
 import express from "express";
 import db from "../utils/db.js";
-import { act } from "react";
 
 const router = express.Router();
 
@@ -64,36 +63,26 @@ router.post("/", (req, res) => {
 
 // PUT /api/members/:member_id to edit a member
 router.put("/:member_id", (req, res) => {
-  const { name, description, owner_name } = req.body;
+  const { name, active_status } = req.body;
   if (name == undefined || name.trim() === "") {
     return res.status(400).json({ error: "Enter a valid member name." });
   }
+  if (active_status != "active" && active_status != "inactive") {
+    return res.status(400).json({ error: "Enter a valid active status." });
+  }
   const result = db
     .prepare(
-      "UPDATE members SET name = ?, description = ?, owner_name = ? WHERE member_id = ?",
+      "UPDATE members SET name = ?, active_status = ? WHERE member_id = ?",
     )
-    .run(name, description, owner_name, req.params.member_id);
+    .run(name, active_status, req.params.member_id);
   if (result.changes == 0) {
     return res.status(404).json({ error: "Member not found." });
   }
   res.json({
     member_id: Number(req.params.member_id),
     name,
-    description,
-    owner_name,
+    active_status,
   });
-});
-
-// DELETE /api/members/:member_id to delete a member
-router.delete("/:member_id", (req, res) => {
-  const member = db
-    .prepare("DELETE FROM members WHERE member_id = ?")
-    .run(req.params.member_id);
-
-  if (member.changes == 0) {
-    return res.status(404).json({ error: "Member not found." });
-  }
-  res.json({ message: "Member deleted." });
 });
 
 export default router;
