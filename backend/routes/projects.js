@@ -3,11 +3,24 @@ import db from "../utils/db.js";
 
 const router = express.Router();
 
+// GET /api/projects to list all projects
 router.get("/", (req, res) => {
   const projects = db.prepare("SELECT * FROM projects").all();
   res.json(projects);
 });
 
+// GET /api/projects/:project_id to list a specific project
+router.get("/:project_id", (req, res) => {
+  const project = db
+    .prepare("SELECT * FROM projects WHERE project_id = ?")
+    .get(req.params.project_id);
+  if (project == undefined) {
+    return res.status(404).json({ error: "Project not found." });
+  }
+  res.json(project);
+});
+
+// POST /api/projects to create a project
 router.post("/", (req, res) => {
   const { name, description, owner_name } = req.body;
   if (name == undefined || name.trim() === "") {
