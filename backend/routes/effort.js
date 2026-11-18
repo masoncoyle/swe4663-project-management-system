@@ -73,7 +73,6 @@ router.post("/", (req, res) => {
       date,
     });
   } catch (e) {
-    console.log(e.message);
     if (e.code == "SQLITE_CONSTRAINT_FOREIGNKEY") {
       return res
         .status(400)
@@ -85,41 +84,54 @@ router.post("/", (req, res) => {
 
 // PUT /api/effort/:effort_id to edit an effort entry
 router.put("/:effort_id", (req, res) => {
-  const { phase, hours, date } = req.body;
-  if (
-    phase != "Requirements Analysis" &&
-    phase != "Design" &&
-    phase != "Coding" &&
-    phase != "Testing" &&
-    phase != "Project Management"
-  ) {
-    return res.status(400).json({
-      error:
-        "Enter a valid phase: Requirements Analysis, Design, Coding, Testing, Project Management",
+  try {
+    const { member_id, phase, hours, date } = req.body;
+    if (member_id == undefined) {
+      return res.status(400).json({
+        error: "Enter a valid member ID.",
+      });
+    }
+    if (
+      phase != "Requirements Analysis" &&
+      phase != "Design" &&
+      phase != "Coding" &&
+      phase != "Testing" &&
+      phase != "Project Management"
+    ) {
+      return res.status(400).json({
+        error:
+          "Enter a valid phase: Requirements Analysis, Design, Coding, Testing, Project Management",
+      });
+    }
+    if (Number(hours) <= 0 || isNaN(Number(hours))) {
+      return res.status(400).json({
+        error: "Enter a positive number (decimals allowed) for hours.",
+      });
+    }
+    if (date == undefined) {
+      return res.status(400).json({ error: "Enter a date (YYYY-MM-DD)." });
+    }
+    const result = db
+      .prepare(
+        "UPDATE effort SET member_id = ?,phase = ?, hours = ?, date = ? WHERE effort_id = ?",
+      )
+      .run(member_id, phase, hours, date, req.params.effort_id);
+    if (result.changes == 0) {
+      return res.status(404).json({ error: "Effort entry not found." });
+    }
+    res.json({
+      effort_id: Number(req.params.effort_id),
+      member_id,
+      phase,
+      hours,
+      date,
     });
+  } catch (e) {
+    if (e.code == "SQLITE_CONSTRAINT_FOREIGNKEY") {
+      return res.status(400).json({ error: "Member ID not found." });
+    }
+    return res.status(500).json({ error: "Error updating effort entry." });
   }
-  if (Number(hours) <= 0 || isNaN(Number(hours))) {
-    return res.status(400).json({
-      error: "Enter a positive number (decimals allowed) for hours.",
-    });
-  }
-  if (date == undefined) {
-    return res.status(400).json({ error: "Enter a date (YYYY-MM-DD)." });
-  }
-  const result = db
-    .prepare(
-      "UPDATE effort SET phase = ?, hours = ?, date = ? WHERE effort_id = ?",
-    )
-    .run(phase, hours, date, req.params.effort_id);
-  if (result.changes == 0) {
-    return res.status(404).json({ error: "Effort entry not found." });
-  }
-  res.json({
-    effort_id: Number(req.params.effort_id),
-    phase,
-    hours,
-    date,
-  });
 });
 
 // DELETE /api/effort/:effort_id to delete an effort entry
