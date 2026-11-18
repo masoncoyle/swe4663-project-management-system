@@ -70,4 +70,40 @@ router.post("/", (req, res) => {
   }
 });
 
+// PUT /api/requirements/:requirement_id to edit a requirement
+router.put("/:requirement_id", (req, res) => {
+  const { name, description, type, estimate } = req.body;
+  if (name == undefined || name.trim() === "") {
+    return res.status(400).json({ error: "Enter a valid requirement name." });
+  }
+  if (type != "functional" && type != "non-functional") {
+    return res
+      .status(400)
+      .json({ error: "Enter a type: functional or non-functional" });
+  }
+  if (
+    (Number(estimate) < 0 || isNaN(Number(estimate))) &&
+    estimate != undefined
+  ) {
+    return res
+      .status(400)
+      .json({ error: "Enter a number (0 or greater) for estimate." });
+  }
+  const result = db
+    .prepare(
+      "UPDATE requirements SET name = ?, description = ?, type = ?, estimate = ? WHERE requirement_id = ?",
+    )
+    .run(name, description, type, estimate, req.params.requirement_id);
+  if (result.changes == 0) {
+    return res.status(404).json({ error: "Requirement not found." });
+  }
+  res.json({
+    requirement_id: Number(req.params.requirement_id),
+    name,
+    description,
+    type,
+    estimate,
+  });
+});
+
 export default router;
