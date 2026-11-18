@@ -106,4 +106,16 @@ router.put("/:requirement_id", (req, res) => {
   });
 });
 
+// DELETE /api/requirements/:requirement_id to delete a requirement
+router.delete("/:requirement_id", (req, res) => {
+  const requirement = db
+    .prepare("DELETE FROM requirements WHERE requirement_id = ?")
+    .run(req.params.requirement_id);
+
+  if (requirement.changes == 0) {
+    return res.status(404).json({ error: "Requirement not found." });
+  }
+  res.json({ message: "Requirement deleted." });
+});
+
 export default router;
