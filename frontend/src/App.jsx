@@ -4,6 +4,7 @@ import DashboardPage from './pages/DashboardPage.jsx'
 import PlannedPage from './pages/PlannedPage.jsx'
 import ProjectsPage from './pages/ProjectsPage.jsx'
 import RequirementsPage from './pages/RequirementsPage.jsx'
+import RisksPage from './pages/RisksPage.jsx'
 import { sampleProjects } from './data/sampleData.js'
 import './App.css'
 
@@ -34,6 +35,7 @@ function App() {
       hours: 0,
       phases: [],
       requirements: [],
+      risks: [],
     }
     setProjects((currentProjects) => [...currentProjects, project])
   }
@@ -56,6 +58,13 @@ function App() {
   function updateRequirements(requirements) {
     setProjects((currentProjects) => currentProjects.map((project) => (
       project.id === selectedProjectId ? { ...project, requirements } : project
+    )))
+  }
+
+  // Keep risk records attached to the selected project
+  function updateRisks(risks) {
+    setProjects((currentProjects) => currentProjects.map((project) => (
+      project.id === selectedProjectId ? { ...project, risks } : project
     )))
   }
 
@@ -84,7 +93,10 @@ function App() {
       {activePage === 'requirements' && (
         <RequirementsPage project={selectedProject} onUpdateRequirements={updateRequirements} />
       )}
-      {!['projects', 'dashboard', 'requirements'].includes(activePage) && (
+      {activePage === 'risks' && (
+        <RisksPage project={selectedProject} onUpdateRisks={updateRisks} />
+      )}
+      {!['projects', 'dashboard', 'requirements', 'risks'].includes(activePage) && (
         <PlannedPage page={activePage} onNavigate={setActivePage} />
       )}
     </AppShell>
