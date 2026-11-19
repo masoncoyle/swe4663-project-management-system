@@ -664,4 +664,16 @@ button {
   .details-list {
     gap: 12px;
   }
+  .add-member-form {
+        display: grid;
+        gap: 10px;
+        margin-bottom: 15px;
+        justify-items: start;
+  }
+
+  .add-member-fields {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+  }
 }

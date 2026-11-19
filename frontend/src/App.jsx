@@ -3,6 +3,8 @@ import AppShell from './components/AppShell.jsx'
 import DashboardPage from './pages/DashboardPage.jsx'
 import PlannedPage from './pages/PlannedPage.jsx'
 import ProjectsPage from './pages/ProjectsPage.jsx'
+import TeamPage from './pages/TeamPage.jsx'
+import EffortHours from './pages/EffortHours.jsx'
 import { sampleProjects } from './data/sampleData.js'
 import './App.css'
 
@@ -72,7 +74,14 @@ function App() {
       {activePage === 'dashboard' && selectedProject && (
         <DashboardPage project={selectedProject} onNavigate={setActivePage} />
       )}
-      {!['projects', 'dashboard'].includes(activePage) && (
+          {activePage === 'team' && selectedProject && (
+              <TeamPage project={selectedProject} />
+      )}
+          {activePage === 'effort' && selectedProject && (
+              <EffortHours project={selectedProject} />
+      )}
+
+      {!['projects', 'dashboard', 'team', 'effort'].includes(activePage) && (
         <PlannedPage page={activePage} onNavigate={setActivePage} />
       )}
     </AppShell>
