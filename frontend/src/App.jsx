@@ -3,6 +3,8 @@ import AppShell from './components/AppShell.jsx'
 import DashboardPage from './pages/DashboardPage.jsx'
 import PlannedPage from './pages/PlannedPage.jsx'
 import ProjectsPage from './pages/ProjectsPage.jsx'
+import TeamPage from './pages/TeamPage.jsx'
+import EffortHours from './pages/EffortHours.jsx'
 import RequirementsPage from './pages/RequirementsPage.jsx'
 import RisksPage from './pages/RisksPage.jsx'
 import { sampleProjects } from './data/sampleData.js'
@@ -90,13 +92,19 @@ function App() {
       {activePage === 'dashboard' && selectedProject && (
         <DashboardPage project={selectedProject} onNavigate={setActivePage} />
       )}
+      {activePage === 'team' && selectedProject && (
+        <TeamPage project={selectedProject} />
+      )}
+      {activePage === 'effort' && selectedProject && (
+         <EffortHours project={selectedProject} />
+      )}
       {activePage === 'requirements' && (
         <RequirementsPage project={selectedProject} onUpdateRequirements={updateRequirements} />
       )}
       {activePage === 'risks' && (
         <RisksPage project={selectedProject} onUpdateRisks={updateRisks} />
       )}
-      {!['projects', 'dashboard', 'requirements', 'risks'].includes(activePage) && (
+      {!['projects', 'dashboard', 'requirements','team', 'effort', 'risks'].includes(activePage) && (
         <PlannedPage page={activePage} onNavigate={setActivePage} />
       )}
     </AppShell>
