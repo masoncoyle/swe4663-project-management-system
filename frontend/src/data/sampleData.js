@@ -16,6 +16,12 @@ export const sampleProjects = [
       { name: 'Testing', hours: 2 },
       { name: 'Project management', hours: 3 },
     ],
+    requirements: [
+      { id: 'REQ-01', description: 'Users can create, view, edit, and delete project records.', type: 'Functional', priority: 'High' },
+      { id: 'REQ-02', description: 'Users can classify requirements as functional or non-functional.', type: 'Functional', priority: 'High' },
+      { id: 'REQ-03', description: 'Users can log hours for a requirement across the five development phases.', type: 'Functional', priority: 'High' },
+      { id: 'REQ-04', description: 'The interface remains readable on desktop and mobile screens.', type: 'Non-functional', priority: 'Medium' },
+    ],
   },
   {
     id: 'inventory-forecast',
@@ -27,5 +33,6 @@ export const sampleProjects = [
     progress: 0,
     hours: 0,
     phases: [],
+    requirements: [],
   },
 ]
