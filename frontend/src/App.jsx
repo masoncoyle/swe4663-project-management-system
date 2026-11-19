@@ -5,6 +5,8 @@ import PlannedPage from './pages/PlannedPage.jsx'
 import ProjectsPage from './pages/ProjectsPage.jsx'
 import TeamPage from './pages/TeamPage.jsx'
 import EffortHours from './pages/EffortHours.jsx'
+import RequirementsPage from './pages/RequirementsPage.jsx'
+import RisksPage from './pages/RisksPage.jsx'
 import { sampleProjects } from './data/sampleData.js'
 import './App.css'
 
@@ -34,6 +36,8 @@ function App() {
       progress: 0,
       hours: 0,
       phases: [],
+      requirements: [],
+      risks: [],
     }
     setProjects((currentProjects) => [...currentProjects, project])
   }
@@ -50,6 +54,20 @@ function App() {
     if (selectedProjectId === projectId) {
       setSelectedProjectId(remainingProjects[0]?.id ?? '')
     }
+  }
+
+  // Keep requirement edits attached to the selected project
+  function updateRequirements(requirements) {
+    setProjects((currentProjects) => currentProjects.map((project) => (
+      project.id === selectedProjectId ? { ...project, requirements } : project
+    )))
+  }
+
+  // Keep risk records attached to the selected project
+  function updateRisks(risks) {
+    setProjects((currentProjects) => currentProjects.map((project) => (
+      project.id === selectedProjectId ? { ...project, risks } : project
+    )))
   }
 
   return (
@@ -74,14 +92,19 @@ function App() {
       {activePage === 'dashboard' && selectedProject && (
         <DashboardPage project={selectedProject} onNavigate={setActivePage} />
       )}
-          {activePage === 'team' && selectedProject && (
-              <TeamPage project={selectedProject} />
+      {activePage === 'team' && selectedProject && (
+        <TeamPage project={selectedProject} />
       )}
-          {activePage === 'effort' && selectedProject && (
-              <EffortHours project={selectedProject} />
+      {activePage === 'effort' && selectedProject && (
+         <EffortHours project={selectedProject} />
       )}
-
-      {!['projects', 'dashboard', 'team', 'effort'].includes(activePage) && (
+      {activePage === 'requirements' && (
+        <RequirementsPage project={selectedProject} onUpdateRequirements={updateRequirements} />
+      )}
+      {activePage === 'risks' && (
+        <RisksPage project={selectedProject} onUpdateRisks={updateRisks} />
+      )}
+      {!['projects', 'dashboard', 'requirements','team', 'effort', 'risks'].includes(activePage) && (
         <PlannedPage page={activePage} onNavigate={setActivePage} />
       )}
     </AppShell>
