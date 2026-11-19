@@ -6,6 +6,26 @@ export function Card({ children, className = '', ...props }) {
   return <section className={`card ${className}`} {...props}>{children}</section>
 }
 
+export function Modal({ title, onClose, children }) {
+  // Close the form when the user clicks outside it
+  return (
+    <div
+      className="modal-backdrop"
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget) onClose()
+      }}
+    >
+      <section className="modal card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <header className="modal__header">
+          <h2 id="modal-title">{title}</h2>
+          <button className="icon-button" type="button" onClick={onClose} aria-label="Close dialog">×</button>
+        </header>
+        {children}
+      </section>
+    </div>
+  )
+}
+
 export function StatusBadge({ status }) {
   const statusClass = status.toLowerCase().replaceAll(' ', '-')
   return <span className={`status-badge status-badge--${statusClass}`}>{status}</span>
