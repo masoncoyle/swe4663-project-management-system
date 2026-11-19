@@ -3,6 +3,7 @@ import AppShell from './components/AppShell.jsx'
 import DashboardPage from './pages/DashboardPage.jsx'
 import PlannedPage from './pages/PlannedPage.jsx'
 import ProjectsPage from './pages/ProjectsPage.jsx'
+import RequirementsPage from './pages/RequirementsPage.jsx'
 import { sampleProjects } from './data/sampleData.js'
 import './App.css'
 
@@ -32,6 +33,7 @@ function App() {
       progress: 0,
       hours: 0,
       phases: [],
+      requirements: [],
     }
     setProjects((currentProjects) => [...currentProjects, project])
   }
@@ -48,6 +50,13 @@ function App() {
     if (selectedProjectId === projectId) {
       setSelectedProjectId(remainingProjects[0]?.id ?? '')
     }
+  }
+
+  // Keep requirement edits attached to the selected project
+  function updateRequirements(requirements) {
+    setProjects((currentProjects) => currentProjects.map((project) => (
+      project.id === selectedProjectId ? { ...project, requirements } : project
+    )))
   }
 
   return (
@@ -72,7 +81,10 @@ function App() {
       {activePage === 'dashboard' && selectedProject && (
         <DashboardPage project={selectedProject} onNavigate={setActivePage} />
       )}
-      {!['projects', 'dashboard'].includes(activePage) && (
+      {activePage === 'requirements' && (
+        <RequirementsPage project={selectedProject} onUpdateRequirements={updateRequirements} />
+      )}
+      {!['projects', 'dashboard', 'requirements'].includes(activePage) && (
         <PlannedPage page={activePage} onNavigate={setActivePage} />
       )}
     </AppShell>

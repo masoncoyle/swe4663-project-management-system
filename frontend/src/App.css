@@ -474,7 +474,8 @@ button {
 }
 
 .form-field input,
-.form-field textarea {
+.form-field textarea,
+.form-field select {
   width: 100%;
   min-width: 0;
   padding: 9px 10px;
@@ -491,11 +492,150 @@ button {
   resize: vertical;
 }
 
+.form-field select {
+  min-height: 34px;
+}
+
+.form-field select:focus {
+  outline: 2px solid rgba(82, 125, 165, .25);
+  border-color: var(--steel-blue);
+}
+
 .form-actions {
   display: flex;
   justify-content: flex-end;
   gap: 9px;
   margin-top: 2px;
+}
+
+/* Requirement counts and list controls */
+.requirements-page-heading,
+.requirements-toolbar,
+.requirement-filters,
+.table-actions {
+  display: flex;
+  align-items: center;
+}
+
+.requirements-page-heading {
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.requirements-page-heading > div {
+  min-width: 0;
+}
+
+.requirements-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.requirement-stat {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 13px 15px;
+}
+
+.requirement-stat span {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.requirement-stat strong {
+  color: var(--navy);
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.requirements-list-card {
+  padding: 15px;
+}
+
+.requirements-toolbar {
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.requirement-filters {
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.filter-button {
+  min-height: 29px;
+  padding: 0 10px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  color: var(--text);
+  background: #fff;
+  font: inherit;
+  font-size: 10px;
+}
+
+.filter-button:hover {
+  border-color: var(--steel-blue);
+}
+
+.filter-button.is-active {
+  border-color: var(--steel-blue);
+  color: #fff;
+  background: var(--steel-blue);
+}
+
+.requirements-search {
+  width: min(100%, 250px);
+}
+
+.requirements-list-card .data-table {
+  min-width: 650px;
+}
+
+.requirements-list-card .data-table td:nth-child(2) {
+  min-width: 260px;
+  line-height: 1.45;
+}
+
+.priority-badge {
+  display: inline-block;
+  padding: 4px 7px;
+  border-radius: 10px;
+  color: #4d6d89;
+  background: #eaf0f5;
+  font-size: 9px;
+  white-space: nowrap;
+}
+
+.priority-badge--high {
+  color: #8a622d;
+  background: #f8eedf;
+}
+
+.priority-badge--low {
+  color: #5f7f78;
+  background: #e6f1ee;
+}
+
+.table-actions {
+  gap: 12px;
+}
+
+.empty-requirements p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.form-error {
+  margin: 0;
+  color: #a34f4f;
+  font-size: 11px;
 }
 
 /* table */
@@ -659,6 +799,14 @@ button {
 
   .form-row {
     grid-template-columns: 1fr;
+  }
+
+  .requirements-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .requirements-page-heading {
+    align-items: flex-start;
   }
 
   .details-list {
