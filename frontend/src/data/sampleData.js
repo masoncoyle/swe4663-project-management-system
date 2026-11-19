@@ -22,6 +22,10 @@ export const sampleProjects = [
       { id: 'REQ-03', description: 'Users can log hours for a requirement across the five development phases.', type: 'Functional', priority: 'High' },
       { id: 'REQ-04', description: 'The interface remains readable on desktop and mobile screens.', type: 'Non-functional', priority: 'Medium' },
     ],
+    risks: [
+      { id: 'risk-01', description: 'Late feedback could delay approval of the updated pages.', status: 'Open' },
+      { id: 'risk-02', description: 'Testing time may be reduced if implementation takes longer than planned.', status: 'Monitoring' },
+    ],
   },
   {
     id: 'inventory-forecast',
@@ -34,5 +38,6 @@ export const sampleProjects = [
     hours: 0,
     phases: [],
     requirements: [],
+    risks: [],
   },
 ]

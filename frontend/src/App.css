@@ -533,6 +533,10 @@ button {
   margin-bottom: 16px;
 }
 
+.requirements-summary.risk-summary {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
 .requirement-stat {
   display: flex;
   align-items: center;
@@ -620,6 +624,35 @@ button {
 .priority-badge--low {
   color: #5f7f78;
   background: #e6f1ee;
+}
+
+.risk-status-select {
+  min-height: 28px;
+  padding: 3px 7px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  color: var(--text);
+  background: #fff;
+  font: inherit;
+  font-size: 10px;
+}
+
+.risk-status-select--open {
+  border-color: #e6c796;
+  color: #805b2c;
+  background: #fbf3e6;
+}
+
+.risk-status-select--monitoring {
+  border-color: #b7cadd;
+  color: #456b8f;
+  background: #edf3f8;
+}
+
+.risk-status-select--resolved {
+  border-color: #b9d8ce;
+  color: #4e8175;
+  background: #eaf4f1;
 }
 
 .table-actions {
@@ -803,6 +836,10 @@ button {
 
   .requirements-summary {
     grid-template-columns: 1fr;
+  }
+
+  .requirements-summary.risk-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .requirements-page-heading {
