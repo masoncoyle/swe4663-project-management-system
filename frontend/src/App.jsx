@@ -18,8 +18,37 @@ const pageTitles = {
 
 function App() {
   const [activePage, setActivePage] = useState('projects')
+  // Keep project changes in the UI until the API is connected
+  const [projects, setProjects] = useState(sampleProjects)
   const [selectedProjectId, setSelectedProjectId] = useState(sampleProjects[0].id)
-  const selectedProject = sampleProjects.find((project) => project.id === selectedProjectId)
+  const selectedProject = projects.find((project) => project.id === selectedProjectId)
+
+  function createProject(projectDetails) {
+    // New projects start with no tracked work
+    const project = {
+      id: `project-${Date.now()}`,
+      ...projectDetails,
+      status: 'Planning',
+      progress: 0,
+      hours: 0,
+      phases: [],
+    }
+    setProjects((currentProjects) => [...currentProjects, project])
+  }
+
+  function updateProject(updatedProject) {
+    setProjects((currentProjects) => currentProjects.map((project) => (
+      project.id === updatedProject.id ? { ...project, ...updatedProject } : project
+    )))
+  }
+
+  function deleteProject(projectId) {
+    const remainingProjects = projects.filter((project) => project.id !== projectId)
+    setProjects(remainingProjects)
+    if (selectedProjectId === projectId) {
+      setSelectedProjectId(remainingProjects[0]?.id ?? '')
+    }
+  }
 
   return (
     <AppShell
@@ -30,11 +59,14 @@ function App() {
     >
       {activePage === 'projects' && (
         <ProjectsPage
-          projects={sampleProjects}
+          projects={projects}
           onSelectProject={(projectId) => {
             setSelectedProjectId(projectId)
             setActivePage('dashboard')
           }}
+          onCreateProject={createProject}
+          onUpdateProject={updateProject}
+          onDeleteProject={deleteProject}
         />
       )}
       {activePage === 'dashboard' && selectedProject && (
