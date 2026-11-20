@@ -117,7 +117,7 @@ function App() {
       {activePage === 'team' && selectedProject && (
         <TeamPage project={selectedProject} />
       )}
-      {activePage === 'effort' && selectedProject && (
+      {activePage === 'effort' && (
          <EffortHours project={selectedProject} />
       )}
       {activePage === 'requirements' && (
