@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Button, Card, Modal, ProgressBar, StatusBadge } from '../components/UI.jsx'
+import { Button, Card, Modal, ProgressBar } from '../components/UI.jsx'
 
 const emptyProject = { name: '', description: '', owner: '', dueDate: '' }
 
@@ -87,7 +87,6 @@ export default function ProjectsPage({
             <Card key={project.id} className="project-card">
               <div className="project-card__heading">
                 <h2>{project.name}</h2>
-                <StatusBadge status={project.status} />
               </div>
               <p className="project-card__description">{project.description}</p>
               <div className="project-card__details">
