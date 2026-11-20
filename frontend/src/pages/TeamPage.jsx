@@ -56,7 +56,16 @@ export default function TeamPage({ project }) {
   const columns = [
         { key: 'member_id', label: 'ID' },
         { key: 'name', label: 'Name' },
-        { key: 'active_status', label: 'Status' },
+        { 
+            key: 'active_status', 
+            label: 'Status',
+            render: (member) => (
+                <span style = {{ color: member.active_status == 'active' ? 'green': 'red'}}>
+                    {member.active_status == 'active' ? 'Active' : 'Inactive'}
+
+                </span>
+            )
+        },
         {
             key: 'actions',
             label: ' ',
@@ -67,6 +76,13 @@ export default function TeamPage({ project }) {
             ),
         }
     ]
+
+  const sortedMembers = [...members].sort((a, b) => {
+    if (a.active_status == b.active_status) {
+        return 0
+    }
+    return a.active_status == 'active' ? -1 : 1
+  })
 
   return (
     <>
@@ -80,7 +96,7 @@ export default function TeamPage({ project }) {
         <form className="add-member-form" onSubmit={handleAddMember}>
           <input
             type="text"
-            placeholder="Member Name"
+            placeholder=" Member Name"
             value={newMemberName}
             onChange={(e) => setNewMemberName(e.target.value)}
           />
@@ -89,7 +105,7 @@ export default function TeamPage({ project }) {
 
         <DataTable
           columns={columns}
-          rows={members}
+          rows={sortedMembers}
           rowKey={(member) => member.member_id}
           emptyMessage="No team members have been added yet."
         />
