@@ -643,13 +643,13 @@ button {
   background: #fbf3e6;
 }
 
-.risk-status-select--monitoring {
+.risk-status-select--mitigating {
   border-color: #b7cadd;
   color: #456b8f;
   background: #edf3f8;
 }
 
-.risk-status-select--resolved {
+.risk-status-select--closed {
   border-color: #b9d8ce;
   color: #4e8175;
   background: #eaf4f1;
@@ -696,10 +696,6 @@ button {
   color: var(--navy);
   font-size: 19px;
   font-weight: 600;
-}
-
-.report-summary-card--total {
-  border-left: 3px solid var(--muted-teal);
 }
 
 .report-chart-card {
@@ -869,6 +865,199 @@ button {
   font-size: 11px;
 }
 
+/* Project dashboard overview */
+.dashboard-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.dashboard-stat-card {
+  display: grid;
+  min-height: 104px;
+  align-content: space-between;
+  gap: 8px;
+  padding: 14px;
+}
+
+.dashboard-stat-card > span {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.dashboard-stat-card strong {
+  color: var(--navy);
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.dashboard-stat-card small {
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.dashboard-content-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.dashboard-panel {
+  min-width: 0;
+  padding: 16px;
+}
+
+.dashboard-panel-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.dashboard-panel-heading h2 {
+  margin: 0;
+  color: var(--navy);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.dashboard-panel-heading p {
+  margin: 5px 0 0;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.dashboard-phase-list {
+  display: grid;
+  gap: 14px;
+}
+
+.dashboard-phase-row {
+  display: grid;
+  gap: 6px;
+}
+
+.dashboard-phase-label {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--text);
+  font-size: 10px;
+}
+
+.dashboard-phase-label strong {
+  color: var(--navy);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.dashboard-phase-track {
+  height: 7px;
+  overflow: hidden;
+  border-radius: 5px;
+  background: var(--soft-slate);
+}
+
+.dashboard-phase-track span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--muted-teal);
+}
+
+.dashboard-details-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 12px;
+  margin: 0 0 18px;
+}
+
+.dashboard-details-list div {
+  display: grid;
+  gap: 5px;
+}
+
+.dashboard-details-list dt {
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.dashboard-details-list dd {
+  margin: 0;
+  color: var(--navy);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.dashboard-quick-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.dashboard-risk-list,
+.dashboard-member-list {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dashboard-risk-list li,
+.dashboard-member-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  font-size: 10px;
+}
+
+.dashboard-risk-list li:last-child,
+.dashboard-member-list li:last-child {
+  border-bottom: 0;
+}
+
+.dashboard-risk-list li strong,
+.dashboard-member-list li strong {
+  color: var(--navy);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.dashboard-empty,
+.dashboard-message,
+.dashboard-error {
+  display: grid;
+  justify-items: start;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.dashboard-empty p,
+.dashboard-error p {
+  margin: 0;
+}
+
+.dashboard-error {
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  margin-bottom: 14px;
+  border-left: 3px solid var(--amber);
+}
+
+.dashboard-empty-note {
+  margin: 0;
+  color: var(--muted);
+  font-size: 10px;
+}
+
 .card-heading {
   margin-bottom: 14px;
 }
@@ -938,6 +1127,10 @@ button {
   }
 
   .details-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dashboard-summary-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
@@ -1032,6 +1225,14 @@ button {
 
   .details-list {
     gap: 12px;
+  }
+
+  .dashboard-content-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-error {
+    grid-template-columns: 1fr;
   }
   .add-member-form {
         display: grid;

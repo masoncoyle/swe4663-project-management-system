@@ -36,7 +36,23 @@ function App() {
     const loadedProjects = await response.json()
     setProjects(loadedProjects)
   }
-  useEffect(() => { loadProject() }, [])
+  useEffect(() => {
+    let isMounted = true
+
+    fetch('/api/projects')
+      .then((response) => {
+        if (!response.ok) throw new Error('Error loading projects.')
+        return response.json()
+      })
+      .then((loadedProjects) => {
+        if (isMounted) setProjects(loadedProjects)
+      })
+      .catch((error) => {
+        if (isMounted) console.error(error.message)
+      })
+
+    return () => { isMounted = false }
+  }, [])
 
   async function createProject(projectDetails) {
     const response = await fetch('/api/projects', {
@@ -78,20 +94,6 @@ function App() {
     }
   }
 
-  // Keep requirement edits attached to the selected project
-  function updateRequirements(requirements) {
-    setProjects((currentProjects) => currentProjects.map((project) => (
-      project.project_id === selectedProjectId ? { ...project, requirements } : project
-    )))
-  }
-
-  // Keep risk records attached to the selected project
-  function updateRisks(risks) {
-    setProjects((currentProjects) => currentProjects.map((project) => (
-      project.project_id === selectedProjectId ? { ...project, risks } : project
-    )))
-  }
-
   return (
     <AppShell
       activePage={activePage}
@@ -111,7 +113,7 @@ function App() {
           onDeleteProject={deleteProject}
         />
       )}
-      {activePage === 'dashboard' && selectedProject && (
+      {activePage === 'dashboard' && (
         <DashboardPage project={selectedProject} onNavigate={setActivePage} />
       )}
       {activePage === 'team' && selectedProject && (
@@ -121,10 +123,10 @@ function App() {
          <EffortHours project={selectedProject} />
       )}
       {activePage === 'requirements' && (
-        <RequirementsPage project={selectedProject} onUpdateRequirements={updateRequirements} />
+        <RequirementsPage project={selectedProject} />
       )}
       {activePage === 'risks' && (
-        <RisksPage project={selectedProject} onUpdateRisks={updateRisks} />
+        <RisksPage project={selectedProject} />
       )}
       {activePage === 'reports' && (
         <ReportsPage project={selectedProject} />
