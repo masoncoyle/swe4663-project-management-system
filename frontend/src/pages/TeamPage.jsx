@@ -78,6 +78,21 @@ export default function TeamPage({ project }) {
     return a.active_status == 'active' ? -1 : 1
   })
 
+      if (!project) {
+        return (
+            <>
+                <section className="page-heading">
+                    <p className="eyebrow">TEAM MANAGEMENT</p>
+                    <h1>Team Members</h1>
+                </section>
+                    <Card className="empty-requirements">
+                        <p>Select a project to view its team members.</p>
+                    </Card>
+            </>
+        )
+    }
+
+
   return (
     <>
       <section className="page-heading">

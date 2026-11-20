@@ -116,7 +116,7 @@ function App() {
       {activePage === 'dashboard' && (
         <DashboardPage project={selectedProject} onNavigate={setActivePage} />
       )}
-      {activePage === 'team' && selectedProject && (
+      {activePage === 'team' && (
         <TeamPage project={selectedProject} />
       )}
       {activePage === 'effort' && (
