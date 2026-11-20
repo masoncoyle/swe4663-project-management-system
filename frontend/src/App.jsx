@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import AppShell from './components/AppShell.jsx'
 import DashboardPage from './pages/DashboardPage.jsx'
 import PlannedPage from './pages/PlannedPage.jsx'
@@ -8,8 +8,8 @@ import EffortHours from './pages/EffortHours.jsx'
 import RequirementsPage from './pages/RequirementsPage.jsx'
 import RisksPage from './pages/RisksPage.jsx'
 import ReportsPage from './pages/ReportsPage.jsx'
-import { sampleProjects } from './data/sampleData.js'
 import './App.css'
+
 
 const pageTitles = {
   dashboard: 'Dashboard',
@@ -23,52 +23,72 @@ const pageTitles = {
 
 function App() {
   const [activePage, setActivePage] = useState('projects')
-  // Keep project changes in the UI until the API is connected
-  const [projects, setProjects] = useState(sampleProjects)
-  const [selectedProjectId, setSelectedProjectId] = useState(sampleProjects[0].id)
-  const selectedProject = projects.find((project) => project.id === selectedProjectId)
+  const [projects, setProjects] = useState([])
+  const [selectedProjectId, setSelectedProjectId] = useState('')
+  const selectedProject = projects.find((project) => project.project_id === selectedProjectId)
 
-  function createProject(projectDetails) {
-    // New projects start with no tracked work
-    const project = {
-      id: `project-${Date.now()}`,
-      ...projectDetails,
-      status: 'Planning',
-      progress: 0,
-      hours: 0,
-      phases: [],
-      requirements: [],
-      risks: [],
-      effortEntries: [],
+  async function loadProject(){
+    const response = await fetch('/api/projects')
+    if (!response.ok) {
+      console.error('Error loading projects.')
+      return
     }
-    setProjects((currentProjects) => [...currentProjects, project])
+    const loadedProjects = await response.json()
+    setProjects(loadedProjects)
+  }
+  useEffect(() => { loadProject() }, [])
+
+  async function createProject(projectDetails) {
+    const response = await fetch('/api/projects', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(projectDetails)
+    })
+    if (!response.ok) {
+      console.error('Error creating project.')
+      return
+    }
+    await loadProject()
   }
 
-  function updateProject(updatedProject) {
-    setProjects((currentProjects) => currentProjects.map((project) => (
-      project.id === updatedProject.id ? { ...project, ...updatedProject } : project
-    )))
+  async function updateProject(updatedProject) {
+    const response = await fetch(`/api/projects/${updatedProject.project_id}`, {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(updatedProject)
+    })
+    if (!response.ok) {
+      console.error('Error updating project.')
+      return
+    }
+    await loadProject()
   }
 
-  function deleteProject(projectId) {
-    const remainingProjects = projects.filter((project) => project.id !== projectId)
-    setProjects(remainingProjects)
+ async function deleteProject(projectId) {
+    const response = await fetch(`/api/projects/${projectId}`, {
+      method: 'DELETE',
+    })
+    if (!response.ok) {
+      console.error('Error deleting project.')
+      return
+    }
+    await loadProject()
     if (selectedProjectId === projectId) {
-      setSelectedProjectId(remainingProjects[0]?.id ?? '')
+      setSelectedProjectId('')
     }
   }
 
   // Keep requirement edits attached to the selected project
   function updateRequirements(requirements) {
     setProjects((currentProjects) => currentProjects.map((project) => (
-      project.id === selectedProjectId ? { ...project, requirements } : project
+      project.project_id === selectedProjectId ? { ...project, requirements } : project
     )))
   }
 
   // Keep risk records attached to the selected project
   function updateRisks(risks) {
     setProjects((currentProjects) => currentProjects.map((project) => (
-      project.id === selectedProjectId ? { ...project, risks } : project
+      project.project_id === selectedProjectId ? { ...project, risks } : project
     )))
   }
 
