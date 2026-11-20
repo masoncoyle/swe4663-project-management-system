@@ -73,8 +73,11 @@ export default function RequirementsPage({ project, onUpdateRequirements }) {
       setFormError('Enter a requirement name and description.')
       return
     }
-    const response = await fetch('/api/requirements', {
-      method: 'POST',
+    const url = editingRequirement.requirement_id ? `/api/requirements/${editingRequirement.requirement_id}` : '/api/requirements'
+    const method = editingRequirement.requirement_id ? 'PUT' : 'POST'
+
+    const response = await fetch(editingRequirement.requirement_id ? `/api/requirements/${editingRequirement.requirement_id}` : '/api/requirements', {
+      method: editingRequirement.requirement_id ? 'PUT' : 'POST',
       headers: { 'Content-Type': 'application/json'},
       body: JSON.stringify(requirementData)
     })
@@ -172,7 +175,7 @@ export default function RequirementsPage({ project, onUpdateRequirements }) {
 
       {editingRequirement && (
         <Modal
-          title={editingRequirement.id ? 'Edit requirement' : 'Add requirement'}
+          title={editingRequirement.requirement_id ? 'Edit requirement' : 'Add requirement'}
           onClose={closeForm}
         >
           <form className="project-form" onSubmit={handleSubmit}>
