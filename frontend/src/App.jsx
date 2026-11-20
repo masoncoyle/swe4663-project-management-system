@@ -51,17 +51,30 @@ function App() {
     await loadProject()
   }
 
-  function updateProject(updatedProject) {
-    setProjects((currentProjects) => currentProjects.map((project) => (
-      project.id === updatedProject.id ? { ...project, ...updatedProject } : project
-    )))
+  async function updateProject(updatedProject) {
+    const response = await fetch(`/api/projects/${updatedProject.project_id}`, {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(updatedProject)
+    })
+    if (!response.ok) {
+      console.error('Error updating project.')
+      return
+    }
+    await loadProject()
   }
 
-  function deleteProject(projectId) {
-    const remainingProjects = projects.filter((project) => project.id !== projectId)
-    setProjects(remainingProjects)
+ async function deleteProject(projectId) {
+    const response = await fetch(`/api/projects/${projectId}`, {
+      method: 'DELETE',
+    })
+    if (!response.ok) {
+      console.error('Error deleting project.')
+      return
+    }
+    await loadProject()
     if (selectedProjectId === projectId) {
-      setSelectedProjectId(remainingProjects[0]?.id ?? '')
+      setSelectedProjectId('')
     }
   }
 
