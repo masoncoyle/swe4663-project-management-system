@@ -28,7 +28,7 @@ function App() {
   const selectedProject = projects.find((project) => project.project_id === selectedProjectId)
 
   async function loadProject(){
-    const response = await fetch("/api/projects")
+    const response = await fetch('/api/projects')
     if (!response.ok) {
       console.error('Error loading projects.')
       return
@@ -38,19 +38,17 @@ function App() {
   }
   useEffect(() => { loadProject() }, [])
 
-  function createProject(projectDetails) {
-    // New projects start with no tracked work
-    const project = {
-      id: `project-${Date.now()}`,
-      ...projectDetails,
-      status: 'Planning',
-      progress: 0,
-      hours: 0,
-      phases: [],
-      requirements: [],
-      risks: [],
+  async function createProject(projectDetails) {
+    const response = await fetch('/api/projects', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(projectDetails)
+    })
+    if (!response.ok) {
+      console.error('Error creating project.')
+      return
     }
-    setProjects((currentProjects) => [...currentProjects, project])
+    await loadProject()
   }
 
   function updateProject(updatedProject) {
