@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react'
 import { Button, Card, DataTable, Modal, StatusBadge } from '../components/UI.jsx'
 
 const emptyRequirement = {
-  id: '',
+  name: '',
   description: '',
-  type: 'Functional',
-  priority: 'Medium',
+  type: 'functional',
+  estimate: '',
 }
 
 const requirementTypes = ['all', 'functional', 'non-functional']
@@ -58,38 +58,22 @@ export default function RequirementsPage({ project, onUpdateRequirements }) {
     setFormError('')
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault()
     const values = new FormData(event.currentTarget)
-    const updatedRequirement = {
-      id: String(values.get('id') ?? '').trim(),
+    const requirementData = {
+      project_id: project.project_id,
+      name: String(values.get('name') ?? '').trim(),
       description: String(values.get('description') ?? '').trim(),
-      type: String(values.get('type') ?? 'Functional'),
-      priority: String(values.get('priority') ?? 'Medium'),
+      type: String(values.get('type') ?? ''),
+      estimate: values.get('estimate') ? Number(values.get('estimate')) : null
     }
     // Required text must contain more than spaces
-    if (!updatedRequirement.id || !updatedRequirement.description) {
-      setFormError('Enter a requirement ID and description.')
+    if (!requirementData.name || !requirementData.description) {
+      setFormError('Enter a requirement name and description.')
       return
     }
 
-    const duplicateId = requirements.some((requirement) => (
-      requirement.id.toLowerCase() === updatedRequirement.id.toLowerCase()
-      && requirement.id.toLowerCase() !== editingRequirement.id.toLowerCase()
-    ))
-
-    if (duplicateId) {
-      setFormError('That requirement ID is already in use for this project.')
-      return
-    }
-
-    // Keep the saved requirement list with the selected project
-    const nextRequirements = editingRequirement.id
-      ? requirements.map((requirement) => (
-        requirement.id === editingRequirement.id ? updatedRequirement : requirement
-      ))
-      : [...requirements, updatedRequirement]
-    onUpdateRequirements(nextRequirements)
     closeForm()
   }
 
@@ -149,7 +133,7 @@ export default function RequirementsPage({ project, onUpdateRequirements }) {
                     aria-pressed={activeType === type}
                     onClick={() => setActiveType(type)}
                   >
-                    {type}
+                    {type.charAt(0).toUpperCase() + type.slice(1)}
                   </button>
                 ))}
               </div>
@@ -186,7 +170,7 @@ export default function RequirementsPage({ project, onUpdateRequirements }) {
             {formError && <p className="form-error" role="alert">{formError}</p>}
             <label className="form-field">
               <span>Requirement ID</span>
-              <input name="id" defaultValue={editingRequirement.id} required maxLength={20} autoFocus />
+              <input name="name" defaultValue={editingRequirement.name} required maxLength={20} autoFocus />
             </label>
             <label className="form-field">
               <span>Description</span>
@@ -196,17 +180,13 @@ export default function RequirementsPage({ project, onUpdateRequirements }) {
               <label className="form-field">
                 <span>Type</span>
                 <select name="type" defaultValue={editingRequirement.type}>
-                  <option>Functional</option>
-                  <option>Non-functional</option>
+                  <option>functional</option>
+                  <option>non-functional</option>
                 </select>
               </label>
               <label className="form-field">
-                <span>Priority</span>
-                <select name="priority" defaultValue={editingRequirement.priority}>
-                  <option>High</option>
-                  <option>Medium</option>
-                  <option>Low</option>
-                </select>
+                <span>Estimated Hours</span>
+                <input name="estimate" defaultValue={editingRequirement.estimate ?? ''}  type='number' min='0'/>
               </label>
             </div>
             <div className="form-actions">
