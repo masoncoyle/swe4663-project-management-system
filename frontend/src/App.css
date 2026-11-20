@@ -655,6 +655,16 @@ button {
   background: #eaf4f1;
 }
 
+.risk-status-select--active {
+  border-color: #2aff82;
+  background: #f8fff8;
+}
+
+.risk-status-select--inactive {
+  border-color: #ff614c;
+  background: #fff9f7;
+}
+
 .table-actions {
   gap: 12px;
 }
@@ -1249,3 +1259,5 @@ button {
         gap: 10px;
         display: flex;
   }
+
+

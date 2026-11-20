@@ -36,8 +36,7 @@ export default function TeamPage({ project }) {
     setNewMemberName("")
    }
   
-  async function handleMemberStatus(member) {
-    const newStatus = member.active_status == 'active' ? 'inactive' : 'active'
+  async function handleMemberStatus(member, newStatus) {
     const response = await fetch(`/api/members/${member.member_id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json'},
@@ -60,21 +59,16 @@ export default function TeamPage({ project }) {
             key: 'active_status', 
             label: 'Status',
             render: (member) => (
-                <span style = {{ color: member.active_status == 'active' ? 'green': 'red'}}>
-                    {member.active_status == 'active' ? 'Active' : 'Inactive'}
-
-                </span>
+                <select
+                    value = {member.active_status}
+                    
+                    className={`risk-status-select risk-status-select--${member.active_status}` }
+                    onChange = { (e) => handleMemberStatus(member, e.target.value)}>
+                        <option value = 'active'>Active</option>
+                        <option value = 'inactive'>Inactive</option>
+                </select>
             )
         },
-        {
-            key: 'actions',
-            label: ' ',
-            render: (member) => (
-                <Button onClick={() => handleMemberStatus(member)}>
-                    {member.active_status == 'active' ? 'Deactivate' : 'Activate'}
-                </Button>
-            ),
-        }
     ]
 
   const sortedMembers = [...members].sort((a, b) => {
