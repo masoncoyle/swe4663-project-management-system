@@ -7,6 +7,7 @@ import TeamPage from './pages/TeamPage.jsx'
 import EffortHours from './pages/EffortHours.jsx'
 import RequirementsPage from './pages/RequirementsPage.jsx'
 import RisksPage from './pages/RisksPage.jsx'
+import ReportsPage from './pages/ReportsPage.jsx'
 import { sampleProjects } from './data/sampleData.js'
 import './App.css'
 
@@ -38,6 +39,7 @@ function App() {
       phases: [],
       requirements: [],
       risks: [],
+      effortEntries: [],
     }
     setProjects((currentProjects) => [...currentProjects, project])
   }
@@ -104,7 +106,10 @@ function App() {
       {activePage === 'risks' && (
         <RisksPage project={selectedProject} onUpdateRisks={updateRisks} />
       )}
-      {!['projects', 'dashboard', 'requirements','team', 'effort', 'risks'].includes(activePage) && (
+      {activePage === 'reports' && (
+        <ReportsPage project={selectedProject} />
+      )}
+      {!['projects', 'dashboard', 'requirements', 'risks', 'reports', 'team', 'effort'].includes(activePage) && (
         <PlannedPage page={activePage} onNavigate={setActivePage} />
       )}
     </AppShell>

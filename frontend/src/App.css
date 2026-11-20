@@ -671,6 +671,168 @@ button {
   font-size: 11px;
 }
 
+/* Required effort summaries and requirement totals */
+.report-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.report-summary-card {
+  display: grid;
+  gap: 8px;
+  min-height: 76px;
+  align-content: space-between;
+  padding: 13px 15px;
+}
+
+.report-summary-card span {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.report-summary-card strong {
+  color: var(--navy);
+  font-size: 19px;
+  font-weight: 600;
+}
+
+.report-summary-card--total {
+  border-left: 3px solid var(--muted-teal);
+}
+
+.report-chart-card {
+  margin-bottom: 16px;
+  padding: 15px;
+}
+
+.report-chart-heading h2 {
+  margin: 0;
+  color: var(--navy);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.report-chart-heading p {
+  margin: 5px 0 0;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.report-chart-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 38px;
+  padding: 20px 0 8px;
+}
+
+.report-donut {
+  display: grid;
+  width: 164px;
+  aspect-ratio: 1;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 50%;
+}
+
+.report-donut__center {
+  display: grid;
+  width: 112px;
+  aspect-ratio: 1;
+  align-content: center;
+  justify-items: center;
+  border-radius: 50%;
+  background: var(--cloud-white);
+}
+
+.report-donut__center strong {
+  color: var(--navy);
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.report-donut__center span {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.report-chart-legend {
+  display: grid;
+  width: min(100%, 330px);
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.report-chart-legend li,
+.report-chart-legend__label {
+  display: flex;
+  align-items: center;
+}
+
+.report-chart-legend li {
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--navy);
+  font-size: 11px;
+}
+
+.report-chart-legend__label {
+  gap: 8px;
+}
+
+.report-chart-legend__label i {
+  width: 9px;
+  height: 9px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+}
+
+.report-chart-legend strong {
+  font-weight: 600;
+}
+
+.report-table-card {
+  padding: 15px;
+}
+
+.report-table-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+
+.report-table-heading h2 {
+  margin: 0;
+  color: var(--navy);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.report-table-heading p {
+  margin: 5px 0 0;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.report-search {
+  flex: 0 0 min(100%, 250px);
+}
+
+.report-table-card .data-table {
+  min-width: 960px;
+}
+
+.report-table-card .data-table td:nth-child(2) {
+  min-width: 240px;
+  line-height: 1.45;
+}
+
 /* table */
 .project-summary,
 .effort-card {
@@ -840,6 +1002,28 @@ button {
 
   .requirements-summary.risk-summary {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .report-summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .report-chart-content {
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .report-chart-legend {
+    width: 100%;
+  }
+
+  .report-table-heading {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .report-search {
+    flex-basis: auto;
   }
 
   .requirements-page-heading {

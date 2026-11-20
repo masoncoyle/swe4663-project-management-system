@@ -26,6 +26,24 @@ export const sampleProjects = [
       { id: 'risk-01', description: 'Late feedback could delay approval of the updated pages.', status: 'Open' },
       { id: 'risk-02', description: 'Testing time may be reduced if implementation takes longer than planned.', status: 'Monitoring' },
     ],
+    // Sample entries power the required reports until effort tracking is connected
+    effortEntries: [
+      { requirementId: 'REQ-01', phase: 'Requirements analysis', hours: 3 },
+      { requirementId: 'REQ-01', phase: 'Design', hours: 1 },
+      { requirementId: 'REQ-01', phase: 'Coding', hours: 2 },
+      { requirementId: 'REQ-01', phase: 'Testing', hours: 0.5 },
+      { requirementId: 'REQ-01', phase: 'Project management', hours: 0.5 },
+      { requirementId: 'REQ-02', phase: 'Requirements analysis', hours: 2 },
+      { requirementId: 'REQ-02', phase: 'Design', hours: 1 },
+      { requirementId: 'REQ-02', phase: 'Coding', hours: 2 },
+      { requirementId: 'REQ-02', phase: 'Testing', hours: 0.5 },
+      { requirementId: 'REQ-02', phase: 'Project management', hours: 1 },
+      { requirementId: 'REQ-03', phase: 'Requirements analysis', hours: 2 },
+      { requirementId: 'REQ-03', phase: 'Design', hours: 2 },
+      { requirementId: 'REQ-03', phase: 'Coding', hours: 4 },
+      { requirementId: 'REQ-03', phase: 'Testing', hours: 1 },
+      { requirementId: 'REQ-03', phase: 'Project management', hours: 1.5 },
+    ],
   },
   {
     id: 'inventory-forecast',
@@ -39,5 +57,6 @@ export const sampleProjects = [
     phases: [],
     requirements: [],
     risks: [],
+    effortEntries: [],
   },
 ]
