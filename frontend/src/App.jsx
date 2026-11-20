@@ -25,7 +25,7 @@ function App() {
   const [activePage, setActivePage] = useState('projects')
   const [projects, setProjects] = useState([])
   const [selectedProjectId, setSelectedProjectId] = useState('')
-  const selectedProject = projects.find((project) => project.id === selectedProjectId)
+  const selectedProject = projects.find((project) => project.project_id === selectedProjectId)
 
   async function loadProject(){
     const response = await fetch("/api/projects")

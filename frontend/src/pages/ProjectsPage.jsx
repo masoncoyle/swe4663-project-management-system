@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { Button, Card, Modal, ProgressBar } from '../components/UI.jsx'
+import { Button, Card, Modal } from '../components/UI.jsx'
 
-const emptyProject = { name: '', description: '', owner: '', dueDate: '' }
+const emptyProject = { name: '', description: '', owner_name: '' }
 
 export default function ProjectsPage({
   projects,
@@ -15,13 +15,13 @@ export default function ProjectsPage({
 
   // Match searches against the details shown on each card
   const filteredProjects = projects.filter((project) => (
-    `${project.name} ${project.description} ${project.owner}`
+    `${project.name} ${project.description} ${project.owner_name}`
       .toLowerCase()
       .includes(search.trim().toLowerCase())
   ))
 
   function openCreateForm() {
-    setEditingProject({ ...emptyProject, id: '' })
+    setEditingProject({ ...emptyProject, project_id: '' })
   }
 
   function openEditForm(project) {
@@ -38,11 +38,10 @@ export default function ProjectsPage({
     const projectDetails = {
       name: String(values.get('name')).trim(),
       description: String(values.get('description')).trim(),
-      owner: String(values.get('owner')).trim(),
-      dueDate: String(values.get('dueDate')).trim() || 'Not set',
+      owner_name : String(values.get('owner')).trim(),
     }
 
-    if (editingProject.id) {
+    if (editingProject.project_id) {
       onUpdateProject({ ...editingProject, ...projectDetails })
     } else {
       onCreateProject(projectDetails)
@@ -53,7 +52,7 @@ export default function ProjectsPage({
   // Confirm before removing a project from the current list
   function confirmDelete(project) {
     const confirmed = window.confirm(`Delete "${project.name}"?`)
-    if (confirmed) onDeleteProject(project.id)
+    if (confirmed) onDeleteProject(project.project_id)
   }
 
   return (
@@ -84,21 +83,16 @@ export default function ProjectsPage({
       {filteredProjects.length ? (
         <section className="project-grid" aria-label="Projects">
           {filteredProjects.map((project) => (
-            <Card key={project.id} className="project-card">
+            <Card key={project.project_id} className="project-card">
               <div className="project-card__heading">
                 <h2>{project.name}</h2>
               </div>
               <p className="project-card__description">{project.description}</p>
               <div className="project-card__details">
-                <span>Owner</span><strong>{project.owner}</strong>
-                <span>Due</span><strong>{project.dueDate}</strong>
-              </div>
-              <div className="project-card__progress">
-                <span>Progress</span><strong>{project.progress}%</strong>
-                <ProgressBar value={project.progress} />
+                <span>Owner</span><strong>{project.owner_name}</strong>
               </div>
               <div className="project-card__actions">
-                <Button variant="secondary" type="button" onClick={() => onSelectProject(project.id)}>
+                <Button variant="secondary" type="button" onClick={() => onSelectProject(project.project_id)}>
                   Open project
                 </Button>
                 <button className="text-button" type="button" onClick={() => openEditForm(project)}>
@@ -121,7 +115,7 @@ export default function ProjectsPage({
 
       {editingProject && (
         <Modal
-          title={editingProject.id ? 'Edit project' : 'New project'}
+          title={editingProject.project_id ? 'Edit project' : 'New project'}
           onClose={closeForm}
         >
           <form className="project-form" onSubmit={handleSubmit}>
@@ -136,11 +130,7 @@ export default function ProjectsPage({
             <div className="form-row">
               <label className="form-field">
                 <span>Owner or manager</span>
-                <input name="owner" defaultValue={editingProject.owner} required maxLength={80} />
-              </label>
-              <label className="form-field">
-                <span>Due date</span>
-                <input name="dueDate" type="text" defaultValue={editingProject.dueDate === 'Not set' ? '' : editingProject.dueDate} placeholder="Optional" />
+                <input name="owner" defaultValue={editingProject.owner_name} required maxLength={80} />
               </label>
             </div>
             <div className="form-actions">
