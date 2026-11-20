@@ -8,7 +8,7 @@ const emptyRequirement = {
   estimate: '',
 }
 
-const requirementTypes = ['all', 'functional', 'non-functional']
+const requirementTypes = ['All', 'functional', 'non-functional']
 
 export default function RequirementsPage({ project, onUpdateRequirements }) {
   const [search, setSearch] = useState('')
@@ -73,7 +73,16 @@ export default function RequirementsPage({ project, onUpdateRequirements }) {
       setFormError('Enter a requirement name and description.')
       return
     }
-
+    const response = await fetch('/api/requirements', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json'},
+      body: JSON.stringify(requirementData)
+    })
+      if (!response.ok) {
+      setFormError('Error creating requirement.')
+      return
+    }
+    await loadRequirements()
     closeForm()
   }
 
