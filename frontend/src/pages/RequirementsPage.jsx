@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button, Card, DataTable, Modal, StatusBadge } from '../components/UI.jsx'
 
 const emptyRequirement = {
@@ -8,21 +8,36 @@ const emptyRequirement = {
   priority: 'Medium',
 }
 
-const requirementTypes = ['All', 'Functional', 'Non-functional']
+const requirementTypes = ['all', 'functional', 'non-functional']
 
 export default function RequirementsPage({ project, onUpdateRequirements }) {
   const [search, setSearch] = useState('')
   const [activeType, setActiveType] = useState('All')
+  const [requirements, setRequirements] = useState([])
   const [editingRequirement, setEditingRequirement] = useState(null)
   const [formError, setFormError] = useState('')
-  const requirements = project?.requirements ?? []
-  const functionalCount = requirements.filter((item) => item.type === 'Functional').length
+  const functionalCount = requirements.filter((item) => item.type === 'functional').length
   const nonFunctionalCount = requirements.length - functionalCount
+
+  async function loadRequirements(){
+    if (!project) {
+      return
+    }
+    const response = await fetch(`/api/requirements?project_id=${project.project_id}`)
+    if (!response.ok) {
+      console.error('Error loading requirements.')
+      return
+    }
+    const loadedRequirements = await response.json()
+    setRequirements(loadedRequirements)
+  }
+
+    useEffect(() => { loadRequirements() }, [project?.project_id])
 
   // Filter this project's requirements by type and search text
   const filteredRequirements = requirements.filter((requirement) => {
     const matchesType = activeType === 'All' || requirement.type === activeType
-    const matchesSearch = `${requirement.id} ${requirement.description}`
+    const matchesSearch = `${requirement.name} ${requirement.description}`
       .toLowerCase()
       .includes(search.trim().toLowerCase())
     return matchesType && matchesSearch
@@ -84,14 +99,9 @@ export default function RequirementsPage({ project, onUpdateRequirements }) {
   }
 
   const columns = [
-    { key: 'id', label: 'Requirement ID' },
+    { key: 'name', label: 'Requirement ID' },
     { key: 'description', label: 'Description' },
     { key: 'type', label: 'Type', render: (requirement) => <StatusBadge status={requirement.type} /> },
-    { key: 'priority', label: 'Priority', render: (requirement) => (
-      <span className={`priority-badge priority-badge--${requirement.priority.toLowerCase()}`}>
-        {requirement.priority}
-      </span>
-    ) },
     { key: 'actions', label: 'Actions', render: (requirement) => (
       <div className="table-actions">
         <button className="text-button" type="button" onClick={() => openEditForm(requirement)}>Edit</button>
@@ -156,7 +166,7 @@ export default function RequirementsPage({ project, onUpdateRequirements }) {
             <DataTable
               columns={columns}
               rows={filteredRequirements}
-              rowKey={(requirement) => requirement.id}
+              rowKey={(requirement) => requirement.requirement_id}
               emptyMessage={requirements.length ? 'No matching requirements.' : 'No requirements added yet.'}
             />
           </Card>
