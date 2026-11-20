@@ -10,7 +10,7 @@ const emptyRequirement = {
 
 const requirementTypes = ['All', 'functional', 'non-functional']
 
-export default function RequirementsPage({ project, onUpdateRequirements }) {
+export default function RequirementsPage({ project }) {
   const [search, setSearch] = useState('')
   const [activeType, setActiveType] = useState('All')
   const [requirements, setRequirements] = useState([])
@@ -73,25 +73,31 @@ export default function RequirementsPage({ project, onUpdateRequirements }) {
       setFormError('Enter a requirement name and description.')
       return
     }
-    const url = editingRequirement.requirement_id ? `/api/requirements/${editingRequirement.requirement_id}` : '/api/requirements'
-    const method = editingRequirement.requirement_id ? 'PUT' : 'POST'
 
     const response = await fetch(editingRequirement.requirement_id ? `/api/requirements/${editingRequirement.requirement_id}` : '/api/requirements', {
       method: editingRequirement.requirement_id ? 'PUT' : 'POST',
       headers: { 'Content-Type': 'application/json'},
       body: JSON.stringify(requirementData)
     })
-      if (!response.ok) {
-      setFormError('Error creating requirement.')
+    if (!response.ok) {
+      setFormError('Error saving requirement.')
       return
     }
     await loadRequirements()
     closeForm()
   }
 
-  function confirmDelete(requirement) {
-    if (!window.confirm(`Delete requirement ${requirement.id}?`)) return
-    onUpdateRequirements(requirements.filter((item) => item.id !== requirement.id))
+  async function confirmDelete(requirement) {
+    if (!window.confirm(`Delete ${requirement.name}?`)){
+      return
+    }
+    const response = await fetch(`/api/requirements/${requirement.requirement_id}`, { method: 'DELETE' }
+    )
+    if (!response.ok) {
+      console.error('Error deleting requirement.')
+      return
+    }
+    await loadRequirements()
   }
 
   const columns = [

@@ -78,13 +78,6 @@ function App() {
     }
   }
 
-  // Keep requirement edits attached to the selected project
-  function updateRequirements(requirements) {
-    setProjects((currentProjects) => currentProjects.map((project) => (
-      project.id === selectedProjectId ? { ...project, requirements } : project
-    )))
-  }
-
   // Keep risk records attached to the selected project
   function updateRisks(risks) {
     setProjects((currentProjects) => currentProjects.map((project) => (
@@ -121,7 +114,7 @@ function App() {
          <EffortHours project={selectedProject} />
       )}
       {activePage === 'requirements' && (
-        <RequirementsPage project={selectedProject} onUpdateRequirements={updateRequirements} />
+        <RequirementsPage project={selectedProject}/>
       )}
       {activePage === 'risks' && (
         <RisksPage project={selectedProject} onUpdateRisks={updateRisks} />
