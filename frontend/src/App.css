@@ -1234,16 +1234,18 @@ button {
   .dashboard-error {
     grid-template-columns: 1fr;
   }
+}
   .add-member-form {
         display: grid;
         gap: 10px;
         margin-bottom: 15px;
         justify-items: start;
+        display: flex;
   }
 
   .add-member-fields {
         display: flex;
         flex-wrap: wrap;
         gap: 10px;
+        display: flex;
   }
-}

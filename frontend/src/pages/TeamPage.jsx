@@ -1,88 +1,115 @@
-import {Card, DataTable,Button } from '../components/UI.jsx'
-import { useState } from 'react'
-
-const PlaceHolderTeamMembers = [
-    { id: 1, name: 'John Doe', job: "Software Engineer" },
-    { id: 2, name: 'Jane Smith', job: "Product Manager" },
-    { id: 3, name: 'Josh Malcome', job: "Backend Developer" },
-    {id: 4, name: 'Barry Allen', job: "Frontend Developer" }, { }
-]
+import { Card, DataTable, Button } from "../components/UI.jsx";
+import { useState, useEffect } from "react";
 
 export default function TeamPage({ project }) {
+  const [members, setMembers] = useState([]);
+  const [newMemberName, setNewMemberName] = useState("");
 
-    const [members, setMembers] = useState(PlaceHolderTeamMembers)
-    const [newMemberName, setNewMemberName] = useState('')
-    const [newMemberJob, setNewMemberJob] = useState('')
-
-
-    function handleAddMember() {
-        event.preventDefault()
-        const name = newMemberName.trim()
-        const job = newMemberJob.trim()
-
-        if (!name || !job) return
-
-
-        const newMember = Math.max(0, ...members.map((member) => member.id)) + 1
-
-        setMembers([...members, {id:newMember, name, job}])
-        setNewMemberName('')
-        setNewMemberJob('')
-
+  async function loadMembers(){
+    if (!project) {
+      return
     }
-
-    function handleRemoveMember(memberId) {
-        setMembers(members.filter((member) => member.id !== memberId))
+    const response = await fetch(`/api/members?project_id=${project.project_id}`)
+    if (!response.ok) {
+      console.error('Error loading members.')
+      return
     }
-    const columns = [
-        { key: 'id', label: 'ID' },
+    const loadedMembers = await response.json()
+    setMembers(loadedMembers)
+  }
+  useEffect(() => { loadMembers() }, [project?.project_id])
+
+  async function handleAddMember(event) {
+    event.preventDefault();
+    const name = newMemberName.trim();
+    if (!name) return;
+    const response = await fetch('/api/members', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json'},
+        body: JSON.stringify({project_id: project.project_id, name})
+    })
+    if (!response.ok) {
+      console.error('Error adding new member.')
+      return
+    }
+    await loadMembers()
+    setNewMemberName("")
+   }
+  
+  async function handleMemberStatus(member) {
+    const newStatus = member.active_status == 'active' ? 'inactive' : 'active'
+    const response = await fetch(`/api/members/${member.member_id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json'},
+        body: JSON.stringify({ 
+            name : member.name,
+            active_status : newStatus
+        })
+    })
+    if (!response.ok) {
+      console.error('Error changing status.')
+      return
+    }
+    await loadMembers()
+  }
+
+  const columns = [
+        { key: 'member_id', label: 'ID' },
         { key: 'name', label: 'Name' },
-        { key: 'job', label: 'Job' },
+        { 
+            key: 'active_status', 
+            label: 'Status',
+            render: (member) => (
+                <span style = {{ color: member.active_status == 'active' ? 'green': 'red'}}>
+                    {member.active_status == 'active' ? 'Active' : 'Inactive'}
+
+                </span>
+            )
+        },
         {
             key: 'actions',
             label: ' ',
             render: (member) => (
-                <Button variant="danger" onClick={() => handleRemoveMember(member.id)}>
-                    Remove
+                <Button onClick={() => handleMemberStatus(member)}>
+                    {member.active_status == 'active' ? 'Deactivate' : 'Activate'}
                 </Button>
-            )
+            ),
         }
     ]
 
-    return (
-        <>
-            <section className="page-heading">
-                <p className="eyebrow">TEAM MANAGEMENT</p>
-                <h1>Team Members</h1>
-                <p>Employees working on {project.name}</p>
-            </section>
+  const sortedMembers = [...members].sort((a, b) => {
+    if (a.active_status == b.active_status) {
+        return 0
+    }
+    return a.active_status == 'active' ? -1 : 1
+  })
 
-            <Card>
-                <form className="add-member-form" onSubmit={handleAddMember}>
-                    <input
-                        type="text"
-                        placeholder="Member Name"
-                        value={newMemberName}
-                        onChange={(e) => setNewMemberName(e.target.value)}
-                    />
-                    <input
-                        className = "text -input"
-                        type="text"
-                        placeholder="Member Job"
-                        value={newMemberJob}
-                        onChange={(e) => setNewMemberJob(e.target.value)}
-                    />
-                    <Button type="submit">Add Member</Button>
-                </form>
+  return (
+    <>
+      <section className="page-heading">
+        <p className="eyebrow">TEAM MANAGEMENT</p>
+        <h1>Team Members</h1>
+        <p>Employees working on {project?.name}</p>
+      </section>
 
-                <DataTable
-                    columns={columns}
-                    rows={members}
-                    rowKey={(member) => member.id}
-                    emptyMessage="No team members have been added yet."
-                />
-            </Card>
-        </>
+      <Card>
+        <form className="add-member-form" onSubmit={handleAddMember}>
+          <input
+            type="text"
+            placeholder=" Member Name"
+            value={newMemberName}
+            onChange={(e) => setNewMemberName(e.target.value)}
+          />
+          <Button type="submit">Add Member</Button>
+        </form>
 
-    )
+        <DataTable
+          columns={columns}
+          rows={sortedMembers}
+          rowKey={(member) => member.member_id}
+          emptyMessage="No team members have been added yet."
+        />
+      </Card>
+    </>
+  );
 }
