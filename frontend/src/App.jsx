@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import AppShell from './components/AppShell.jsx'
 import DashboardPage from './pages/DashboardPage.jsx'
 import PlannedPage from './pages/PlannedPage.jsx'
@@ -9,6 +9,7 @@ import RequirementsPage from './pages/RequirementsPage.jsx'
 import RisksPage from './pages/RisksPage.jsx'
 import { sampleProjects } from './data/sampleData.js'
 import './App.css'
+
 
 const pageTitles = {
   dashboard: 'Dashboard',
@@ -22,10 +23,20 @@ const pageTitles = {
 
 function App() {
   const [activePage, setActivePage] = useState('projects')
-  // Keep project changes in the UI until the API is connected
-  const [projects, setProjects] = useState(sampleProjects)
-  const [selectedProjectId, setSelectedProjectId] = useState(sampleProjects[0].id)
-  const selectedProject = projects.find((project) => project.id === selectedProjectId)
+  const [projects, setProjects] = useState([])
+  const [selectedProjectId, setSelectedProjectId] = useState('')
+  const selectedProject = projects.find((project) => project.project_id === selectedProjectId)
+
+  async function loadProject(){
+    const response = await fetch("/api/projects")
+    if (!response.ok) {
+      console.error('Error loading projects.')
+      return
+    }
+    const loadedProjects = await response.json()
+    setProjects(loadedProjects)
+  }
+  useEffect(() => { loadProject() }, [])
 
   function createProject(projectDetails) {
     // New projects start with no tracked work
