@@ -28,7 +28,7 @@ function App() {
   const selectedProject = projects.find((project) => project.project_id === selectedProjectId)
 
   async function loadProject(){
-    const response = await fetch("/api/projects")
+    const response = await fetch('/api/projects')
     if (!response.ok) {
       console.error('Error loading projects.')
       return
@@ -38,32 +38,43 @@ function App() {
   }
   useEffect(() => { loadProject() }, [])
 
-  function createProject(projectDetails) {
-    // New projects start with no tracked work
-    const project = {
-      id: `project-${Date.now()}`,
-      ...projectDetails,
-      status: 'Planning',
-      progress: 0,
-      hours: 0,
-      phases: [],
-      requirements: [],
-      risks: [],
+  async function createProject(projectDetails) {
+    const response = await fetch('/api/projects', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(projectDetails)
+    })
+    if (!response.ok) {
+      console.error('Error creating project.')
+      return
     }
-    setProjects((currentProjects) => [...currentProjects, project])
+    await loadProject()
   }
 
-  function updateProject(updatedProject) {
-    setProjects((currentProjects) => currentProjects.map((project) => (
-      project.id === updatedProject.id ? { ...project, ...updatedProject } : project
-    )))
+  async function updateProject(updatedProject) {
+    const response = await fetch(`/api/projects/${updatedProject.project_id}`, {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(updatedProject)
+    })
+    if (!response.ok) {
+      console.error('Error updating project.')
+      return
+    }
+    await loadProject()
   }
 
-  function deleteProject(projectId) {
-    const remainingProjects = projects.filter((project) => project.id !== projectId)
-    setProjects(remainingProjects)
+ async function deleteProject(projectId) {
+    const response = await fetch(`/api/projects/${projectId}`, {
+      method: 'DELETE',
+    })
+    if (!response.ok) {
+      console.error('Error deleting project.')
+      return
+    }
+    await loadProject()
     if (selectedProjectId === projectId) {
-      setSelectedProjectId(remainingProjects[0]?.id ?? '')
+      setSelectedProjectId('')
     }
   }
 
