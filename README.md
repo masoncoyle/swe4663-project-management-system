@@ -18,7 +18,7 @@ This is a web application built for software project managers to log, update, an
 
 **Risks:** Enter, view, edit, and delete project risks and update their status. Risks are automatically ranked in descending order of exposure (probability x impact).
 
-**Reports:** Display total expended hours for each requirement, separated by development phase. Display total project hours separated by development phase. Display recorded hours contributed by each team member. Compare estimated to actual hours towards a requirement and flag if actual is over-estimate.
+**Reports:** Display total expended hours for each requirement (including a breakdown by phase), development phase, and team member. Compare estimated to actual hours towards a requirement and flag when actual exceeds the estimate.
 
 ## Installation
 
