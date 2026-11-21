@@ -29,12 +29,14 @@ This is a web application built for software project managers to log, update, an
 
 ### Setup
 1. Clone the repository or unzip the project folder.
-2. Install the backend: open a terminal in the project's backend folder, and run the following.
+2. Install the backend: open a terminal in the project folder, and run the following.
    ```
+   cd backend
    npm install
    ```
-3. Install the frontend: open a terminal in the project's frontend folder, and run the following.
+3. Install the frontend: open a second terminal in the project folder, and run the following.
    ```
+   cd frontend
    npm install
    ```
 
